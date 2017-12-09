@@ -3,10 +3,8 @@ Arduino Development Script
 
 :author: Connor Henley, @thatging3rkid
 """
-import sys
-
 import os
-
+import sys
 import datetime
 
 from src.FileContents import FileContents, VALID_KEYWORDS, ParserFileNotFoundError
@@ -41,7 +39,6 @@ def main():
         if not(os.path.exists(".arudev")):
             with open(".arudev", 'a') as f:
                 f.write("# arudev project file\n")
-
                 # See if the user put the program in quiet mode
                 if not(len(sys.argv) >= 3 and sys.argv[2] == "-q"):
                     f.write("# Generated on: " + datetime.datetime.now().strftime("%x %X") + "\n")
@@ -50,6 +47,7 @@ def main():
         else:
             print("arudev: project already initialized; doing nothing", file=sys.stderr)
             exit(1)
+
 
 
     # Try to open the arudev file
@@ -62,10 +60,11 @@ def main():
         # File not found when parsing, so raise an error
         print(e, file=sys.stderr)
         exit(1)
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         # .arudev file not found, so this is not an arudev directory
         # todo check parent directories?
         print("arudev: invalid directory (no .arudev file)", file=sys.stderr)
+        print(e)
         exit(1)
     except Exception as e:
         # Some other exception happened, print it

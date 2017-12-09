@@ -101,7 +101,11 @@ ENV/
 .mypy_cache/
 
 # PyCharm
-/.idea/
+.idea/
 
 # arudev test files
 .arudev
+test/
+test.txt
+test.ino
+dev/
