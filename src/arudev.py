@@ -6,6 +6,7 @@ Arduino Development Script
 import os
 import sys
 import datetime
+import traceback
 
 from src.FileContents import FileContents, VALID_KEYWORDS, ParserFileNotFoundError
 
@@ -62,12 +63,13 @@ def main():
         exit(1)
     except FileNotFoundError as e:
         # .arudev file not found, so this is not an arudev directory
-        # todo check parent directories?
         print("arudev: invalid directory (no .arudev file)", file=sys.stderr)
         print(e)
+        traceback.print_stack()
         exit(1)
     except Exception as e:
         # Some other exception happened, print it
         print(e, file=sys.stderr)
+        traceback.print_exc(e)
 
 main()
