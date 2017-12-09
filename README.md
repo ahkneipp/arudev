@@ -1,2 +1,8 @@
 # arudev
-A script that makes it easier to develop code with good version control habits and still use Arduino IDE.
+
+Development scripts for use with Arduino IDE (aka **Ar**d**u**ino **Dev**eloplopment scripts).
+
+## Installation
+
+todo
+
