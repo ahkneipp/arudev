@@ -112,7 +112,7 @@ class FileContents():
             shutil.copy(self.ardunio_file, dev_dir)
 
             # Open the Arduino IDE
-            subprocess.call("start " + self.ardunio_file, shell=True)
+            subprocess.call("start " + dev_dir + os.path.basename(self.ardunio_file), shell=True)
         elif slice[0] == "enddev":
             # Quick link to the development directory
             dev_dir = "dev" + os.sep + os.path.basename(self.ardunio_file)[:-4]
