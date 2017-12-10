@@ -12,4 +12,4 @@ First, PyWin32 needs to be installed (making sure your default python version an
 
 #### Installing globally
 
-With a self-compiled /dist or a precompiled zip file, extract (or copy) the code to a local directory (ie C:\Users\<username>\bin\arudev-win-amd64-v0.1c), then add that path to the PATH environment variable (start>explorer (right click)>more>properties>advanced system settings>environment variables; on newer Windows versions, you can go under User Variables and add a new entry).
+With a self-compiled /dist or a precompiled zip file, extract (or copy) the code to a local directory (ie C:\Users\ `username` \bin\arudev-win-amd64-v0.1c), then **add** that path to the PATH environment variable (start>explorer (right click)>more>properties>advanced system settings>environment variables; on newer Windows versions, you can go under User Variables and add a new entry).
