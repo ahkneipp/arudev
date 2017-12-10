@@ -19,7 +19,7 @@ class FileContents():
         # None check
         if (file == None):
             print("file is None!", file=sys.stderr)
-            exit(1)
+            sys.exit(1)
 
         # Read in everything in the file
         for line in file.read().split("\n"):
@@ -36,7 +36,7 @@ class FileContents():
                     # Make sure that an arduino project file hasn't been found already
                     if self.ardunio_file != None:
                         print("arudev: two .ino files tracked, exiting", file=sys.stderr)
-                        exit(1)
+                        sys.exit(1)
                     else:
                         self.ardunio_file = path.strip()
                 else:
@@ -77,7 +77,7 @@ class FileContents():
         # Make sure the arduino project file was found
         if self.ardunio_file == None:
             print("arudev: no arduino project file (.ino) found, exiting", file=sys.stderr)
-            exit(1)
+            sys.exit(1)
 
         # Make sure there are no files with the same name
         file_names = []
@@ -85,7 +85,7 @@ class FileContents():
             name = os.path.basename(file)
             if name in file_names:
                 print("arudev: redundant file name: `" + name + "`", file=sys.stderr)
-                exit(1)
+                sys.exit(1)
             else:
                 file_names.append(name)
         pass
@@ -120,7 +120,7 @@ class FileContents():
             # Make sure the dev directory exists
             if not(os.path.exists(dev_dir)):
                 print("arudev: dev directory does not exist (have you run `startdev`?)", file=sys.stderr)
-                exit(1)
+                sys.exit(1)
 
             # Copy files back to their home
             for file in self.files:
@@ -131,7 +131,7 @@ class FileContents():
             # Make sure we have enough arguments
             if len(slice) == 1:
                 print("arudev: expected argument; exiting", file=sys.stderr)
-                exit(1)
+                sys.exit(1)
 
             # Open the project file
             with open(".arudev", "a+") as f:
