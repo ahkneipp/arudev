@@ -137,7 +137,7 @@ class FileContents():
             with open(".arudev", "a+") as f:
                 for nfile in slice[1:]:
                     if os.path.exists(nfile):
-                        f.write(nfile + "\n")
+                        f.write(nfile + os.linesep)
                     else:
                         print("arudev: file not found (`" + nfile + "`); continuing", file=sys.stderr)
         elif slice[0] == "clean":
