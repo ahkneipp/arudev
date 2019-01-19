@@ -8,8 +8,10 @@ import sys
 import datetime
 import traceback
 
-from src.FileContents import FileContents, VALID_KEYWORDS, ParserFileNotFoundError
-
+try:
+    from src.FileContents import FileContents, VALID_KEYWORDS, ParserFileNotFoundError
+except:
+    from FileContents import FileContents, VALID_KEYWORDS, ParserFileNotFoundError
 
 def main():
     """
