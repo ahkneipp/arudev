@@ -112,7 +112,19 @@ class FileContents():
             shutil.copy(self.ardunio_file, dev_dir)
 
             # Open the Arduino IDE
-            subprocess.call("start " + dev_dir + os.sep + os.path.basename(self.ardunio_file), shell=True)
+            if sys.platform == "linux" or sys.platform == "linux2":
+                ret = subprocess.call("arduino " + dev_dir + os.sep + os.path.basename(self.ardunio_file), shell=True,
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+                # Check to see if Arduino IDE could be found
+                if (ret != 0):
+                    print("arudev: Arduino IDE cannot be opened, continuing", file=sys.stderr)
+            elif sys.platform == "darwin":
+                subprocess.call("open -n " + dev_dir + os.sep + os.path.basename(self.ardunio_file), shell=True)
+            elif sys.platform == "win32" or sys.platform == "win64":
+                subprocess.call("start " + dev_dir + os.sep + os.path.basename(self.ardunio_file), shell=True)
+            else:
+                print("arudev: unknown OS, not trying to open file", sys.stderr)
         elif slice[0] == "enddev":
             # Quick link to the development directory
             dev_dir = "dev" + os.sep + os.path.basename(self.ardunio_file)[:-4]
