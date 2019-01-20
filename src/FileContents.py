@@ -1,7 +1,7 @@
 import os
 import sys
-import subprocess
 import shutil
+import subprocess
 
 VALID_KEYWORDS = ("init", "add", "start", "startdev", "end", "enddev", "clean")
 
@@ -142,10 +142,6 @@ class FileContents:
                 shutil.copy(dev_dir + os.sep + os.path.basename(file), file)
 
             shutil.copy(dev_dir + os.sep + os.path.basename(self.ardunio_file), self.ardunio_file)
-
-        # clean
-        elif args[0] == "clean":
-            shutil.rmtree("dev" + os.sep)
 
 
 class ParserFileNotFoundError(FileNotFoundError):
