@@ -17,21 +17,20 @@ except ImportError as ie:
 
 def main():
     """
-	Main method; initialize objects and delegate work
+    Main method; initialize objects and delegate work
     """
-
 
     ## Parse the arguments (who needs argparse?)
     # Start by making sure there are enough arguments
     if len(sys.argv) < 2:
-		print("arudev: not enough arguments (use --help for help)", file=sys.stderr)
+        print("arudev: not enough arguments (use --help for help)", file=sys.stderr)
         sys.exit(1)
 
     # See if the keyword is valid
     if not (sys.argv[1] in VALID_KEYWORDS):
         # Second keyword is asking for help
         if sys.argv[1] == "--help":
-	        print("arudev: an Arduino development script\n", file=sys.stderr)
+            print("arudev: an Arduino development script\n", file=sys.stderr)
             print("usage: arudev keyword [args]\n", file=sys.stderr)
             print("keyword: tells arudev what to do (ie `init` to initialize this directory)", file=sys.stderr)
             print("[args]: arguments processed with the keyword (if needed)\n", file=sys.stderr)
@@ -42,10 +41,11 @@ def main():
             print("    add: adds files to be moved by arudev", file=sys.stderr)
             print("    clean: removes the temporary directory", file=sys.stderr)
             sys.exit(0)
-	    # Unknown keyword, so print an error
+        # Unknown keyword, so print an error
         else:
             print("arudev: unknown keyword `" + sys.argv[1] + "`", file=sys.stderr)
-	        sys.exit(1)
+            sys.exit(1)
+
     ## Check to see if the first call is a file-call (operations that edit the file directly)
     # init
     if sys.argv[1] == "init":
@@ -53,7 +53,7 @@ def main():
         if not (os.path.exists(".arudev")):
             with open(".arudev", 'a') as f:
                 f.write("# arudev project file\n")
-	            f.write("# Generated on: " + datetime.datetime.now().strftime("%x %X") + "\n")
+                f.write("# Generated on: " + datetime.datetime.now().strftime("%x %X") + "\n")
             print("arudev: project initialized", file=sys.stderr)
             sys.exit(0)
         else:
