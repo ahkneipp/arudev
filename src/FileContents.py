@@ -3,9 +3,10 @@ import sys
 import subprocess
 import shutil
 
-VALID_KEYWORDS = ("init", "add", "startdev", "enddev", "clean")
+VALID_KEYWORDS = ("init", "add", "start", "startdev", "end", "enddev", "clean")
 
-class FileContents():
+
+class FileContents:
 
     files = []
     ardunio_file = None
@@ -17,14 +18,14 @@ class FileContents():
         """
 
         # None check
-        if (file == None):
+        if file is None:
             print("file is None!", file=sys.stderr)
             sys.exit(1)
 
         # Read in everything in the file
         for line in file.read().split("\n"):
 
-            def _add_file(self, path):
+            def _add_file(s_self, path):
                 """
                 See if the file is an Arduino project file
 
@@ -34,13 +35,13 @@ class FileContents():
                 # See if this is the arduino project file
                 if len(path.strip()) > 4 and path.strip()[-4:] == ".ino":
                     # Make sure that an arduino project file hasn't been found already
-                    if self.ardunio_file != None:
+                    if s_self.ardunio_file is not None:
                         print("arudev: two .ino files tracked, exiting", file=sys.stderr)
                         sys.exit(1)
                     else:
-                        self.ardunio_file = path.strip()
+                        s_self.ardunio_file = path.strip()
                 else:
-                    self.files.append(path.strip())
+                    s_self.files.append(path.strip())
                 pass
             # Empty line detection
             if len(line.strip()) == 0:
@@ -56,7 +57,7 @@ class FileContents():
 
             # Convert directories into files
             if os.path.isdir(line.strip()):
-                def _find_file_r(self, path):
+                def _find_file_r(s_self, path):
                     """
                     Recursive function to find all the files if a directory is given
 
@@ -64,18 +65,18 @@ class FileContents():
                     """
                     # Base case
                     if os.path.isfile(path):
-                        _add_file(self, path)
+                        _add_file(s_self, path)
                     else:
                         # Recurse over every file in the directory
                         for npath in os.listdir(path):
-                            _find_file_r(self, path + os.sep + npath)
+                            _find_file_r(s_self, path + os.sep + npath)
 
                 _find_file_r(self, line.strip())
             else:
                 _add_file(self, line.strip())
 
         # Make sure the arduino project file was found
-        if self.ardunio_file == None:
+        if self.ardunio_file is None:
             print("arudev: no arduino project file (.ino) found, exiting", file=sys.stderr)
             sys.exit(1)
 
@@ -90,14 +91,14 @@ class FileContents():
                 file_names.append(name)
         pass
 
-    def run(self, slice):
+    def run(self, args):
         # Check for an empty slice
-        if len(slice) == 0:
+        if len(args) == 0:
             return
 
-        ### Check to see what the user wants to do
+        ## Check to see what the user wants to do
         # startdev
-        if slice[0] == "startdev":
+        if args[0] == "startdev" or args[0] == "start":
             # Starting development is pretty easy, make a directory and copy everything in there
             dev_dir = "dev/" + os.path.basename(self.ardunio_file)[:-4]
             # Make sure the dev directory exists
@@ -113,11 +114,11 @@ class FileContents():
 
             # Open the Arduino IDE
             if sys.platform == "linux" or sys.platform == "linux2":
-                ret = subprocess.call("arduino " + dev_dir + os.sep + os.path.basename(self.ardunio_file), shell=True,
-                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                ret = subprocess.call("arduino " + dev_dir + os.sep + os.path.basename(self.ardunio_file) + " &", shell=True,
+                                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 # Check to see if Arduino IDE could be found
-                if (ret != 0):
+                if ret != 0:
                     print("arudev: Arduino IDE cannot be opened, continuing", file=sys.stderr)
             elif sys.platform == "darwin":
                 subprocess.call("open -n " + dev_dir + os.sep + os.path.basename(self.ardunio_file), shell=True)
@@ -125,13 +126,15 @@ class FileContents():
                 subprocess.call("start " + dev_dir + os.sep + os.path.basename(self.ardunio_file), shell=True)
             else:
                 print("arudev: unknown OS, not trying to open file", sys.stderr)
-        elif slice[0] == "enddev":
+
+        # enddev
+        elif args[0] == "enddev" or args[0] == "end":
             # Quick link to the development directory
             dev_dir = "dev" + os.sep + os.path.basename(self.ardunio_file)[:-4]
 
             # Make sure the dev directory exists
             if not(os.path.exists(dev_dir)):
-                print("arudev: dev directory does not exist (have you run `startdev`?)", file=sys.stderr)
+                print("arudev: dev directory does not exist (have you run `start`?)", file=sys.stderr)
                 sys.exit(1)
 
             # Copy files back to their home
@@ -139,20 +142,9 @@ class FileContents():
                 shutil.copy(dev_dir + os.sep + os.path.basename(file), file)
 
             shutil.copy(dev_dir + os.sep + os.path.basename(self.ardunio_file), self.ardunio_file)
-        elif slice[0] == "add":
-            # Make sure we have enough arguments
-            if len(slice) == 1:
-                print("arudev: expected argument; exiting", file=sys.stderr)
-                sys.exit(1)
 
-            # Open the project file
-            with open(".arudev", "a+") as f:
-                for nfile in slice[1:]:
-                    if os.path.exists(nfile):
-                        f.write(nfile + '/')
-                    else:
-                        print("arudev: file not found (`" + nfile + "`); continuing", file=sys.stderr)
-        elif slice[0] == "clean":
+        # clean
+        elif args[0] == "clean":
             shutil.rmtree("dev" + os.sep)
 
 
